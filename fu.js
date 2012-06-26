@@ -1,6 +1,6 @@
 var createServer = require("http").createServer;
 var readFile = require("fs").readFile;
-var sys = require("sys");
+var sys = require("util");
 var url = require("url");
 DEBUG = false;
 
@@ -21,6 +21,7 @@ var getMap = {};
 fu.get = function(path, handler) {
     getMap[path] = handler;
 };
+
 var server = createServer(function(req, res) {
     if (req.method === "GET" || req.method === "HEAD") {
         var handler = getMap[url.parse(req.url).pathname] || notFound;

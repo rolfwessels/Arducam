@@ -9,7 +9,7 @@ body {
 }
 
 body, table {
-  font-family: DejaVu Sans Mono, fixed; 
+  font-family: Arial, fixed; 
   font-size: 14pt;
   line-height: 150%;
 }
@@ -29,3 +29,7 @@ table {
 
 a { text-decoration: none; color: #888; }
 a:hover { text-decoration: underline; color: #aaa; }
+a.left { display:block; float:left; width:265px; height:256px; background:url('arrow-left.png') }
+a.right { display:block; float:left; width:265px; height:256px; background:url('arrow-right.png') }
+a.button span {display:none;}
+div.mainContent {width:530px; margin:10px; text-align:center}

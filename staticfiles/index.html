@@ -2,16 +2,88 @@
 <html>
     <head>
         <link rel="stylesheet" href="style.css" type="text/css"/>
-        <script src="jquery-1.2.6.min.js" type="text/javascript"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
+        <script src="https://raw.github.com/jeresig/jquery.hotkeys/master/jquery.hotkeys.js" type="text/javascript"></script>
         <script src="client.js" type="text/javascript"></script>
-        <title>ArduCamController</title>
+        <title>Arducam</title>
     </head>
     <body>
-        <h1>ArduCamController</h1>
-        <div>
         
-            <a class="button left" href="#left" >Left</a>
-            <a class="button right" href="#right">Right</a>
+        <div class="mainContent">
+            <h1>ArduCam</h1>
+            <div class="selectPort">Select a port : <select id="ports"></select></div>
+            <div class="buttonCollection" >
+                <a class="button left" href="#left" ><span>Left</span></a>
+                <a class="button right" href="#right"><span>Right</span></a>
+            </div>
+            <div class="result"></div>
         </div>
+        
+        <script type="text/javascript">
+            var port = "";
+            $(document).ready(function () {
+                function callRemoveFunction(functionName, call) {
+                    $.get(functionName, function (data) {
+
+                        $('.result').html(data.Message);
+                        if (data == null || data.status != "ok") {
+                            alert(data.message);
+                            initialize();
+                        }
+                        if (call != null) call(data.status == "ok");
+                        if (data.ports != null) {
+                            $('#ports').find('option').remove().end();
+                            $('#ports').append(new Option("Select one", "select one"));
+                            $.each(data.ports, function (ind, prt) {
+                                $('#ports').append(new Option(prt.comName, prt.comName));
+                            });
+                        }
+
+                    });
+                }
+                $('#ports').append(new Option("Select one", "select one"));
+
+                $("#ports").change(function () {
+                    $("#ports option:selected").each(function () {
+                        port = $(this).text();
+                        if (port == "Select one") {
+                            port = ""
+                            $("div.result").text("Disconnected");
+                        }
+                        else {
+                            $("div.result").text("Connecting to " + port);
+                            $("div.selectPort").hide('slow');
+                            callRemoveFunction("connect?port=" + port, function (c) {
+                                if (c) {
+                                    $("div.result").text("Connected to " + port);
+                                }
+                                else {
+                                    $("div.result").text("Connection failed try again");
+                                }
+                            });
+                            $("div.buttonCollection").show('slow');
+                        }
+                    });
+
+                });
+
+                function initialize() {
+                    callRemoveFunction('ports');
+                    $("div.buttonCollection").hide('slow', function () {
+                        $("div.selectPort").show('slow');
+                    });
+                }
+                callRemoveFunction('ports');
+                $("div.buttonCollection").hide();
+
+                $("a.left").click(function () { callRemoveFunction('funcleft'); });
+                $("a.right").click(function () { callRemoveFunction('funcright'); });
+
+
+                $(document).bind('keydown', 'left', function () { callRemoveFunction('funcleft'); });
+                $(document).bind('keydown', 'right', function () { callRemoveFunction('funcright'); });
+
+            });
+        </script>
     </body>
 </html>
