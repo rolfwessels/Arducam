@@ -1,4 +1,4 @@
-# Arducap
+# Arducam
 
 # Install
 
@@ -15,7 +15,7 @@ set PYTHON=c:\dev\Software\Python27\python.exe
 set PATH=%PATH%;c:\Program Files\nodejs\
 ```
 
-Then run 
+Then run in git clone directory
 
 ```
 npm install serialport2
