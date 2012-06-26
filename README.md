@@ -18,6 +18,7 @@ set PATH=%PATH%;c:\Program Files\nodejs\
 Then run in git clone directory
 
 ```
+npm install -g node-gyp
 npm install serialport2
 npm install sf
 node server.js
